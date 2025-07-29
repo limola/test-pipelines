@@ -1,0 +1,34 @@
+name: Test-Nginx
+
+on:
+  push:
+    branches:
+      - stage  # O il branch su cui vuoi che il deploy avvenga (es. master, develop)
+
+env:
+  REGISTRY: my-registry-docker.it
+  IMAGE_NAME: my-app # Sostituisci con il nome della tua applicazione/immagine
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest # Specifica il sistema operativo del runner
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Clona il repository nel runner
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }} # Variabile d'ambiente segreta per l'username
+        password: ${{ secrets.DOCKER_PASSWORD }} # Variabile d'ambiente segreta per la password
+        registry: ${{ env.REGISTRY }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: . # Il contesto di build è la root del repository
+        push: true # Esegue il push dell'immagine
+        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest # Tag dell'immagine
+        # Puoi anche aggiungere un tag con il commit SHA per versioning
+        # tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
