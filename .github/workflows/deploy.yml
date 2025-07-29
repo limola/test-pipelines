@@ -6,7 +6,7 @@ on:
       - stage  # O il branch su cui vuoi che il deploy avvenga (es. master, develop)
 
 env:
-  REGISTRY: my-registry-docker.it
+  REGISTRY: ${{ vars.REGISTRY }}
   IMAGE_NAME: ${{ vars.IMAGE_NAME }} # Prende il valore dalla variabile del repository
 
 jobs:
