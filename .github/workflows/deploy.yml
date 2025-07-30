@@ -22,13 +22,13 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }} # Variabile d'ambiente segreta per l'username
         password: ${{ secrets.DOCKER_PASSWORD }} # Variabile d'ambiente segreta per la password
-        registry: ${{ env.REGISTRY }}
+        registry: ${{ vars.REGISTRY }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: . # Il contesto di build è la root del repository
         push: true # Esegue il push dell'immagine
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest # Tag dell'immagine
+        tags: ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:latest # Tag dell'immagine
         # Puoi anche aggiungere un tag con il commit SHA per versioning
-        # tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        # tags: ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:latest, ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
